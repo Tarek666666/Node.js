@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <title>Blog Api</title>
+</head>
+<body>
+
+  <form class='mt-5 ml-5' action="/blogs" method="POST" >
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <label class="sr-only" for="inlineFormInput">Blog's data</label>
+        <input type="text" class="form-control mb-2" id="blog-data" placeholder="{ title: .... , blog : .... }" name='title'>
+      </div>
+     
+      <div class="col-auto">
+      
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+      </div>
+    </div>
+  </form>
+  
+
+  <script src="./server.js" ></script>
+</body>
+</html>

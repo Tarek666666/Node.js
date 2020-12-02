@@ -1,3 +1,4 @@
+'use strict'
 const generateUUID = require('uuid/v4');
 
 let books = [{
@@ -15,9 +16,10 @@ exports.readAll = function (req, res) {
 }
 
 exports.readOne = function (req, res) {
-  let book = books.find(book => book.id == req.id);
+  let book = books.find(book => book.id == req.params.id);
+  
   if ( books ) {
-    res.status(200).json(books).end();
+    res.status(200).json(book).end();
   }
   else {
     res.status(400).end('no such book');
