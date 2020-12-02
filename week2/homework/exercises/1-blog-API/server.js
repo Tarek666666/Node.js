@@ -3,6 +3,7 @@ const app = express();
 const fs = require("fs");
 const path = require("path");
 const PORT = process.env.PORT || 3000;
+const filePath = path.join(path.dirname(__filename), "/blogs");
 
 app.use(express.json());
 
@@ -35,7 +36,7 @@ app.post("/blogs", function (req, res) {
         // getting the title and content of the blog sent in the request body
         const title = req.body.title;
         const content = req.body.content;
-        fs.writeFileSync(path.join(path.dirname(__filename), "/blogs", title), content, "utf8");
+        fs.writeFileSync(path.join(filePath, title), content, "utf8");
         res.status(201);
         res.send("Ok!");
         res.end();
@@ -45,8 +46,10 @@ app.post("/blogs", function (req, res) {
 // updating a post, using the title as a parameter and the content key in the request's body
 app.put("/posts/:title", function (req, res) {
     const title = req.params.title;
-    isExist = fs.existsSync(path.join(path.dirname(__filename), "/blogs"), title);
+    isExist = fs.existsSync( path.join(filePath, title));
     //checking if there is a file with the same name
+
+    console.log(isExist);
     if (!isExist) {
         res.setHeader("Content-Type", "application/json");
         res.status(404);
@@ -59,11 +62,7 @@ app.put("/posts/:title", function (req, res) {
             res.send("Coulnd't find the post to update it");
             res.end();
         } else {
-            fs.writeFileSync(
-                path.join(path.dirname(__filename), "/blogs", title),
-                req.body.content,
-                "utf8"
-            );
+            fs.writeFileSync(path.join(filePath, title),req.body.content,"utf8");
             res.status(200);
             res.send("updated");
             res.end();
@@ -73,13 +72,13 @@ app.put("/posts/:title", function (req, res) {
 // delete a post
 app.delete("/blogs/:title", function (req, res) {
     const title = req.params.title;
-    isExist = fs.existsSync(path.join(path.dirname(__filename), "/blogs", title));
+    isExist = fs.existsSync(path.join(filePath, title));
     if (!isExist) {
         res.setHeader("Content-Type", "application/json");
         res.status(404);
         res.send("This post doesn't exist");
     } else {
-        fs.unlinkSync(path.join(path.dirname(__filename), "/blogs", title));
+        fs.unlinkSync(path.join(filePath, title));
         res.setHeader("Content-Type", "text/plain");
         res.status(200);
         res.send("post has been deleted");
@@ -91,14 +90,14 @@ app.delete("/blogs/:title", function (req, res) {
 
 app.get("/blogs/:title", function (req, res) {
     const title = req.params.title;
-    isExist = fs.existsSync(title);
+    isExist = fs.existsSync(path.join(filePath, title));
     // if there is no such a post
     if (!isExist) {
         res.setHeader("Content-Type", "application/json");
         res.status(404);
         res.send("This post doesn't exist");
     } else {
-        const post = fs.readFileSync(title);
+        const post = fs.readFileSync(path.join(filePath, title));
         res.setHeader("Content-Type", "application/json");
         res.status(200);
         res.send(post);
@@ -112,27 +111,25 @@ app.get("/blogs", function (req, res) {
     res.setHeader("Content-Type", "application/json");
     res.status(200);
 
-    fs.readdir(path.join(path.dirname(__filename), "/blogs"), (err, data) => {
+    fs.readdir(filePath, (err, data) => {
         if (err) {
             res.status(500);
             res.send(err);
             res.end();
         } else {
-            data.forEach((blog) => {
+            data.map((blog) => {
                 allBlogs.push({
                     title: blog,
-                    content: fs.readFileSync(
-                        path.join(path.dirname(__filename), "/blogs", `${blog}`),
-                        "UTF-8"
-                    ),
+                    content: fs.readFileSync(path.join(filePath, `${blog}`),"UTF-8"),
                 });
             });
+
 
             // handle if there is no files at all
 
             if (allBlogs.length == 0) {
-                res.status(404);
-                res.send("There is no blogs");
+                res.status(200);
+                res.send("[Empty ...]");
                 res.end();
             } else {
                 res.setHeader("Content-Type", "application/json");
