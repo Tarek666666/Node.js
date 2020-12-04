@@ -4,8 +4,13 @@ const fs = require("fs");
 const path = require("path");
 const PORT = process.env.PORT || 3000;
 const filePath = path.join(path.dirname(__filename), "/blogs");
+const exphbs  = require('express-handlebars');
 
 app.use(express.json());
+
+
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
 
 
 
