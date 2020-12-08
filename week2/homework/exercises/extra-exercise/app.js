@@ -5,7 +5,7 @@ const exphbs = require("express-handlebars");
 const path = require("path");
 const fs = require("fs");
 const PORT = process.env.PORT || 3000;
-const members = require("./members.json");
+let members = require("./members.json");
 const app = express();
 
 
@@ -43,6 +43,7 @@ app.post("/blogs", (req, res) => {
 
 // page to show all blogs 
 app.get("/watchAll", (req, res) => {
+    members = JSON.parse(fs.readFileSync("members.json"));
     res.render("watchAll", { members });
 });
 
