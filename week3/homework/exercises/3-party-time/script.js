@@ -17,7 +17,7 @@ let data = {
 async function makeReservation() {
     // YOUR CODE GOES IN HERE
     try {
-        const response = await fetch("https://reservation100-sandbox.mxapps.io/rest-doc/api", {
+        const response = await fetch("https://reservation100-sandbox.mxapps.io/api/reservations", {
             headers: { "Content-Type": "application/json" },
             method: "POST",
             body: JSON.stringify(data),
